@@ -58,3 +58,14 @@ npm install @ngrx/store@9.1.0
 npm install @ngrx/store-devtools@9.1.0
 npm install ngrx-store-persist@1.0.20
 npm i --save-dev @types/ngrx-store-persist
+
+
+### obtener valores de form
+>- https://stackoverflow.com/questions/68152611/angular-formarray-getrawvalue-at-index
+
+
+### migrar stores
+>- https://stackoverflow.com/questions/61445152/which-to-use-storemodule-forroot-or-storemodule-forfeature
+>- npm i --save ngrx-store-persist
+>- npm i --save-dev @types/ngrx-store-persist
+>- https://www.npmjs.com/package/ngrx-store-persist/v/1.0.15

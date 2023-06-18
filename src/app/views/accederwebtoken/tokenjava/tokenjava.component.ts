@@ -1,26 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TokenService } from 'src/app/views/accederwebtoken/token.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tio } from 'src/app/commons/models/tio';
-
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-tokenjava',
   templateUrl: './tokenjava.component.html',
   styleUrls: ['./tokenjava.component.css']
 })
-export class TokenJavaComponent implements OnInit {
-  inputtoken:string | undefined = "";
+export class TokenJavaComponent {
   lista:any = {};
-  nombre:string="";
+  registerForm: FormGroup;
   constructor(
-    private tokenService: TokenService,
+    private readonly fb: FormBuilder, 
+    private readonly tokenService: TokenService,
   ) { 
-    
-  }
-
-  ngOnInit() {
+    this.registerForm = this.fb.group({ 
+      inputtoken: ['', Validators.required],
+      nombre: ['', Validators.required]
+    }); 
   }
 
   initFechaInput(fecha: any){
@@ -39,7 +39,7 @@ export class TokenJavaComponent implements OnInit {
       password: ""
     };
     var token = await this.tokenService.login2();
-    this.inputtoken = token;
+    this.registerForm.setValue({inputtoken: token});
   }
 
   async obtenerUsuarios(){
@@ -47,7 +47,8 @@ export class TokenJavaComponent implements OnInit {
   }
 
   async obtenerUsuariosAPI2Name(){
-    this.lista = await this.tokenService.listaName(this.nombre);
+    var nombre = this.registerForm.getRawValue().nombre;
+    this.lista = await this.tokenService.listaName(nombre);
     console.log('lista');
     console.log(JSON.stringify(this.lista));
   }
@@ -56,5 +57,4 @@ export class TokenJavaComponent implements OnInit {
     console.log('lista');
     console.log(JSON.stringify(this.lista));
   }
-
 }

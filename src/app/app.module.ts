@@ -32,9 +32,9 @@ localStorage.setItem('URL', 'https://localhost:44382/');
 
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { GeocercaGoogleComponent } from 'src/app/views/geocerca-google/geocerca-google.component';
+//import { GeocercaGoogleComponent } from 'src/app/views/geocerca-google/geocerca-google.component';
 
-import { AgmCoreModule } from '@agm/core';
+//import { AgmCoreModule } from '@agm/core';
 
 
 import { MenuComponent } from 'src/app/views/menu/menu.component';
@@ -48,6 +48,8 @@ import { TokenJavaComponent } from 'src/app/views/accederwebtoken/tokenjava/toke
 
 import { TokenizedInterceptorProviders } from "src/app/commons/services/tokenized.interceptor.service";
 import { EjemploComponent } from 'src/app/views/ejemplo/ejemplo.component';
+import { GeocercaGoogleComponent } from './views/geocerca-google/geocerca-google.component';
+import { AgmCoreModule } from '@agm/core';
 @NgModule({
   declarations: [
     TokenJavaComponent,
@@ -68,41 +70,36 @@ import { EjemploComponent } from 'src/app/views/ejemplo/ejemplo.component';
     EjemploComponent
   ],
   imports: [
-    
-    StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
-      logOnly: environment.production, // Restrict extension to log-only mode
-      
-    }),
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDZktO_JnnvrY4BnD2IyZo8PqNXiDTWP1w'
-    }),
-    /* StoreModule.forRoot({
+    }), 
+    /*
+    StoreModule.forRoot({
       tasks: taskReducer,
       users: userReducer,
       login: loginReducer
-    }), */
-    /* 
+    }),
+    */ 
+    /*
     StoreModule.forRoot({
       tasks: taskReducer,
       users: userReducer,
       login: loginReducer
     }, { 
       metaReducers: [storageSyncMetaReducer] 
-    }),*/
+    }),
+    */
+   /*
+    StoreModule.forFeature('tasks', taskReducer),
+    StoreModule.forFeature('users', userReducer),
+    StoreModule.forFeature('login', loginReducer),
+    */
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatListModule,
-    MatButtonModule,
-    MatIconModule, 
-    MatFormFieldModule
+    HttpClientModule
   ],
   providers: [
     TokenizedInterceptorProviders,

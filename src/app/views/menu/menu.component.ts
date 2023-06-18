@@ -18,10 +18,10 @@ import { TokenService } from 'src/app/views/accederwebtoken/token.service';
 })
 
 
-export class MenuComponent implements OnInit {
+export class MenuComponent {
   //@ViewChild(LoginUsuariosComponent) child;
 
-  login: Observable<Tio[]>;
+  //login: Observable<Tio[]>;
   tio: Tio;
   nombre = '';
   email = 'zddfdfdsfd';
@@ -30,10 +30,10 @@ export class MenuComponent implements OnInit {
   constructor(
     location: Location, 
     private router: Router, 
-    private tokenService: TokenService,
-    private store: Store<AppState>) {
+    //private store: Store<AppState>,
+    private tokenService: TokenService) {
       this.tio = new Tio("", "", "");
-    this.login = this.store.select('login');
+    //this.login = this.store.select('login');
     if(localStorage.getItem('login')){
       const json: string  | null = localStorage.getItem('login');
       if(json != null){
@@ -63,12 +63,9 @@ export class MenuComponent implements OnInit {
       email: "error@gmail.com"
     }
     this.usuariologeado = false;
-    this.store.dispatch(new TaskActions.InicioUsuario(usuario) )
+    //this.store.dispatch(new TaskActions.InicioUsuario(usuario) )
     this.router.navigate(['/login']);
     this.tokenService.logout();
-  }
-
-  ngOnInit() {
   }
 
 }

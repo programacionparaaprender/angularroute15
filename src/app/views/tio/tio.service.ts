@@ -11,7 +11,7 @@ import axios from "axios";
 
 export class TioService {
   //tioURL = 'http://localhost:8762/api/tio/';
-  tioURL = 'https://servicios-profesionales.herokuapp.com/tio/';
+  tioURL = "https://localhost:7107/api/usuario/";
   usuariologeado = false;
   constructor(private httpClient: HttpClient) { }
 
@@ -24,56 +24,41 @@ export class TioService {
   }
 
   lista(): Observable<Tio[]> {
-    return this.httpClient.get<Tio[]>(this.tioURL + 'lista');
+    return this.httpClient.get<Tio[]>(this.tioURL);
   }
 
   detalle(id: number): Observable<Tio> {
-    return this.httpClient.get<Tio>(this.tioURL + `detalle/${id}`);
-  }
-
-  async login(tio: Tio){
-    try{
-      var response;
-      //response = await axios.post(this.tioURL+'login', tio);
-      response = await this.httpClient.post(this.tioURL+'login', tio).toPromise();
-      return response;
-      
-    }catch(e: unknown | any){
-      return e.response;
-    }
-  }
-  loginObservable(tio: Tio): Observable<any>{
-    return  this.httpClient.post<any>(this.tioURL+'login', tio);
-  }
-
-  loginObservableUrol(url:string, tio: Tio): Observable<any>{
-    return  this.httpClient.post<any>(url+'login', tio);
+    return this.httpClient.get<Tio>(this.tioURL + `/${id}`);
   }
 
   async registrar(tio: Tio){
     try{
       var response;
-      response = await axios.post(this.tioURL+'nuevo', tio);
+      response = await axios.post(this.tioURL, tio);
       return response;
       
     }catch(e: unknown | any){
+      console.log("tio");
+      console.log(JSON.stringify(tio));
+      console.log("error");
+      console.log(e);
       return e.response;
     }
   }
 
   /* registrar(tio: Tio): Observable<any> {
     return this.httpClient.post<any>(this.tioURL + 'nuevo', tio);
-  } */
+  } 
 
   nuevo(tio: Tio): Observable<any> {
     return this.httpClient.post<any>(this.tioURL + 'nuevo', tio);
   }
-
+  */
   actualizar(tio: Tio, id: number): Observable<any> {
-    return this.httpClient.put<any>(this.tioURL + `actualizar/${id}`, tio);
+    return this.httpClient.put<any>(this.tioURL + `/${id}`, tio);
   }
 
   borrar(id: number): Observable<any> {
-    return this.httpClient.delete<any>(this.tioURL + `borrar/${id}`);
+    return this.httpClient.delete<any>(this.tioURL + `/${id}`);
   }
 }

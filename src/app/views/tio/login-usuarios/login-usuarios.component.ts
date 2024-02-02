@@ -8,8 +8,10 @@ import * as TaskActions from 'src/app/commons/store/login.actions';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { TokenService } from 'src/app/views/accederwebtoken/token.service';
-
+import { TokenService } from 'src/app/services/token.service';
+import { Usertoken } from 'src/app/models/usertoken';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Responseusertoken } from 'src/app/models/responseusertoken';
 
 @Component({
   selector: 'app-login-usuarios',
@@ -17,28 +19,30 @@ import { TokenService } from 'src/app/views/accederwebtoken/token.service';
   styleUrls: ['./login-usuarios.component.css']
 })
 export class LoginUsuariosComponent implements OnInit {
-  login: Observable<Tio[]>;
+  login: Usertoken | null;
   tio: Tio;
-  nombre = '';
-  email = 'zddfdfdsfd';
-  password = '';
+  nombre:string | null = '';
+  email:string | null  = 'zddfdfdsfd';
+  password:string | null  = '';
+  registerForm: FormGroup<any>;
   constructor(
     private tioService: TioService, 
     private router: Router,
-    private tokenService: TokenService,
-    private store: Store<AppState>) { 
+    private fb: FormBuilder, 
+    private tokenService: TokenService) { 
+      this.registerForm = this.fb.group({ 
+        nombre: ['', Validators.required], 
+        email: ['', Validators.required], 
+        password: ['', Validators.required]
+      }); 
     this.tio = new Tio("", "", "");
-    this.login = this.store.select('login');
+    this.login = null;
     if(localStorage.getItem('login')){
       const json: string  | null = localStorage.getItem('login');
       if(json != null){
-        const usuario = JSON.parse(json);
-        //console.log('login')
-        //console.log(localStorage.getItem('login'))  }console.log('login')
-        console.log(localStorage.getItem('login'))
-        if(usuario.nombre != 'error'){
-          this.router.navigate(['/']);
-        }
+        const usertoken:Usertoken = JSON.parse(json);
+        this.login = usertoken;
+        this.router.navigate(['/login']);
       }
     }
   }
@@ -47,40 +51,49 @@ export class LoginUsuariosComponent implements OnInit {
   }
 
   async onLogin() {
-    
+    if(!this.registerForm.valid){
+      return;
+    }
     try{
-
-      this.tio = new Tio(this.nombre, this.email, this.password);
-      await this.tokenService.login(this.tio);
-      var response = await this.tioService.login(this.tio);
-      if(response.status==200){
-        const data = response.data;
-        const usuario = data;
-        this.store.dispatch(new TaskActions.InicioUsuario({
-          id: usuario.id,
-          nombre: usuario.nombre,
-          email: usuario.email,
-          password: usuario.password
-        }) );
-
+      //const nombre = this.registerForm.get('nombre').value;
+        //const email = this.registerForm.get('email').value
+        //const password = this.registerForm.get('password').value
+        const nombre = this.registerForm.getRawValue().nombre;
+        const email = this.registerForm.getRawValue().email;
+        const password = this.registerForm.getRawValue().password;
+        this.tio = new Tio(nombre, email, password);
+        console.log(JSON.stringify(this.tio));
+        await this.tokenService.login(this.tio);
+        var responseusertoken: Responseusertoken | undefined | null = await this.tokenService.login(this.tio);
         
-        this.router.navigate(['/']);
-      }else{
-        console.log('ocurrio un error')
-        console.log(JSON.stringify(response));
-      }
-      /* this.tioService.login(this.tio).subscribe(
-        data => {
-          console.log('data:')
-          console.log(JSON.stringify(data))
-          console.log(JSON.stringify(data[0]))
-          //alert(data.mensaje);
-          //this.router.navigate(['/']);
-        },
-        err => {
-          alert(err.error.mensaje);
+        if(responseusertoken){
+          var data = responseusertoken.data;
+          const usertoken: Usertoken = {
+            token: data.token,
+            id: data.id,
+            nombre: data.nombre,
+            email: data.email,
+            role: data.role,
+            status:data.status
+          };
+          this.tokenService.setUser(usertoken);
+          this.router.navigate(['/tarjeta']);
+        }else{
+          console.log('ocurrio un error')
+          console.log(JSON.stringify(responseusertoken));
         }
-      ); */
+        /* this.tioService.login(this.tio).subscribe(
+          data => {
+            console.log('data:')
+            console.log(JSON.stringify(data))
+            console.log(JSON.stringify(data[0]))
+            //alert(data.mensaje);
+            //this.router.navigate(['/']);
+          },
+          err => {
+            alert(err.error.mensaje);
+          }
+        ); */
     }catch(e){
       console.log(e);
     }

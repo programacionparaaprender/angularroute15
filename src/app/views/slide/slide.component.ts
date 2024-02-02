@@ -10,20 +10,18 @@ import { LoginUsuariosComponent } from 'src/app/views/tio/login-usuarios/login-u
 import { Location } from "@angular/common";
 import { TokenService } from 'src/app/services/token.service';
 import { Usertoken } from 'src/app/models/usertoken';
-import { MenuService } from 'src/app/services/menu.service';
-import { ResponseMenu } from 'src/app/models/responsemenu';
 
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  selector: 'app-slide',
+  templateUrl: './slide.component.html',
+  styleUrls: ['./slide.component.css']
 })
 
 
-export class MenuComponent implements OnInit {
+export class SlideComponent {
   //@ViewChild(LoginUsuariosComponent) child;
-  menus:ResponseMenu[] = [];
+
   tio: Tio;
   nombre = '';
   email = 'zddfdfdsfd';
@@ -33,7 +31,6 @@ export class MenuComponent implements OnInit {
     location: Location, 
     private router: Router, 
     //private store: Store<AppState>,
-    private menuService: MenuService,
     private tokenService: TokenService) {
       this.tio = new Tio("", "", "");
       //this.login = this.store.select('login');
@@ -52,18 +49,6 @@ export class MenuComponent implements OnInit {
         }
       }
     }
-  }
-
-  async ngOnInit() {
-    const response = await this.menuService.lista(); 
-    if(response){
-      this.menus = response.data;
-      console.log('menus');
-      console.log(JSON.stringify(this.menus));
-    }else {
-      console.log('no esta autorizado');
-    }
-     
   }
   /* ngAfterViewInit() {
     this.usuariologeado = this.child.usuariologeado

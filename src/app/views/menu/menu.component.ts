@@ -21,7 +21,7 @@ import { TokenService } from 'src/app/views/accederwebtoken/token.service';
 export class MenuComponent {
   //@ViewChild(LoginUsuariosComponent) child;
 
-  //login: Observable<Tio[]>;
+  login: Observable<Tio[]> | null;
   tio: Tio;
   nombre = '';
   email = 'zddfdfdsfd';
@@ -33,7 +33,8 @@ export class MenuComponent {
     //private store: Store<AppState>,
     private tokenService: TokenService) {
       this.tio = new Tio("", "", "");
-    //this.login = this.store.select('login');
+      this.login = null;
+      //this.login = this.store.select('login');
     if(localStorage.getItem('login')){
       const json: string  | null = localStorage.getItem('login');
       if(json != null){
